@@ -1,0 +1,754 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pranshu Sheoran | GlitchWraith</title>
+    <meta name="description" content="Portfolio of Pranshu Sheoran (GlitchWraith) - Frontend Developer & Custom ROM Creator">
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
+    <style>
+        * { margin: 0; padding: 0; box-sizing: border-box; }
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            line-height: 1.6;
+            color: #333;
+            overflow-x: hidden;
+        }
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+        }
+        /* Preloader Styles */
+        .loader-wrapper {
+            position: fixed;
+            top: 0; left: 0; width: 100%; height: 100%;
+            background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+            display: flex; justify-content: center; align-items: center;
+            z-index: 9999;
+            transition: opacity 0.5s ease;
+        }
+        .glitch-loader { text-align: center; color: white; }
+        .glitch-text {
+            font-size: 3rem; font-weight: bold; position: relative; color: #00ff41; letter-spacing: 3px;
+            animation: glitch 1.5s infinite linear; /* Adjusted timing and type */
+        }
+        .glitch-text::before, .glitch-text::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            clip-path: inset(0); /* Base for clip-path animation */
+        }
+        .glitch-text::before { animation: glitch-1 1.5s infinite linear; color: #ff0040; z-index: -1; }
+        .glitch-text::after  { animation: glitch-2 1.5s infinite linear; color: #00ffff; z-index: -2; }
+
+        @keyframes glitch { /* Refined Preloader Glitch */
+            0%, 100% { transform: translate(0); opacity: 1; clip-path: inset(0); }
+            10% { transform: translate(-0.5px, 0.5px); }
+            20% { transform: translate(0.5px, -0.5px); clip-path: inset(0 0 30% 0); }
+            30% { transform: translate(-0.5px, -0.5px); }
+            40% { transform: translate(0.5px, 0.5px); clip-path: inset(30% 0 70% 0); }
+            50% { transform: translate(-0.5px, 0.5px); }
+            60% { transform: translate(0.5px, -0.5px); clip-path: inset(70% 0 0 0); }
+            70% { transform: translate(-0.5px, -0.5px); opacity: 0.8;}
+            80% { transform: translate(0.5px, 0.5px); clip-path: inset(0 30% 0 0); }
+            90% { transform: translate(0,0); opacity: 1; clip-path: inset(0); }
+        }
+        @keyframes glitch-1 { /* Refined Preloader Glitch */
+            0%, 100% { transform: translate(0); clip-path: inset(0); }
+            15% { transform: translate(0.5px, -0.5px); clip-path: inset(10% 0 80% 0); }
+            35% { transform: translate(-0.5px, 0.5px); clip-path: inset(80% 0 10% 0); }
+            55% { transform: translate(-0.5px, -0.5px); }
+            75% { transform: translate(0.5px, 0.5px); clip-path: inset(0 0 40% 0); }
+        }
+        @keyframes glitch-2 { /* Refined Preloader Glitch */
+            0%, 100% { transform: translate(0); clip-path: inset(0); }
+            10% { transform: translate(-0.5px, -0.5px); }
+            30% { transform: translate(0.5px, -0.5px); clip-path: inset(0 70% 0 0); }
+            50% { transform: translate(0.5px, 0.5px); clip-path: inset(0 0 0 70%); }
+            70% { transform: translate(-0.5px, 0.5px); }
+        }
+
+        .loading-bar {
+            width: 300px; height: 4px;
+            background: rgba(255, 255, 255, 0.3);
+            margin: 30px auto 10px; border-radius: 2px; overflow: hidden;
+        }
+        .loading-progress {
+            height: 100%;
+            background: linear-gradient(90deg, #00ff41, #00ffff);
+            width: 0%;
+            animation: loading 3s linear forwards; /* Changed to linear for smoother JS sync */
+        }
+        @keyframes loading { to { width: 100%; } }
+        .loading-percentage { font-size: 1.2rem; margin-top: 10px; }
+        /* Loader Hidden State */
+        .loader-hidden { opacity: 0; pointer-events: none; }
+
+        /* Navigation */
+        .navbar {
+            position: fixed; top: 0; width: 100%;
+            background: rgba(26, 26, 46, 0.95);
+            backdrop-filter: blur(10px);
+            z-index: 1000; transition: all 0.3s ease;
+        }
+        .nav-container {
+            max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: flex; justify-content: space-between; align-items: center; height: 70px;
+        }
+        .glitch-logo {
+            font-size: 1.4rem; /* Adjusted for longer text */
+            font-weight: bold; color: #00ff41; position: relative;
+            animation: logo-glow 3s ease-in-out infinite alternate;
+        }
+        @keyframes logo-glow {
+            from { text-shadow: 0 0 10px #00ff41; }
+            to { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; }
+        }
+        .nav-menu { display: flex; list-style: none; gap: 30px; }
+        .nav-link {
+            color: white; text-decoration: none; font-weight: 500; position: relative; transition: color 0.3s ease;
+        }
+        .nav-link:hover, .nav-link:focus { color: #00ff41; } /* Combined hover and focus */
+        .nav-link::after {
+            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
+            background: #00ff41; transition: width 0.3s ease;
+        }
+        .nav-link:hover::after, .nav-link:focus::after { width: 100%; } /* Combined hover and focus */
+        .hamburger { display: none; flex-direction: column; cursor: pointer; padding: 5px; } /* Added padding for focus visibility */
+        .hamburger span { width: 25px; height: 3px; background: white; margin: 3px 0; transition: 0.3s; }
+        .hamburger:focus {
+            outline: 2px solid #00ff41;
+            outline-offset: 2px;
+        }
+
+
+        /* Hero Section */
+        .hero {
+            min-height: 100vh;
+            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
+            display: flex; align-items: center; position: relative; overflow: hidden;
+        }
+        .hero-container {
+            width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px;
+            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
+        }
+        .hero-content { color: white; z-index: 2; }
+        .hero-title { font-size: 3.5rem; margin-bottom: 20px; line-height: 1.2; }
+        .type-animation {
+            animation: typing 2s steps(8), blink 0.5s step-end infinite alternate;
+            overflow: hidden; white-space: nowrap; border-right: 3px solid #00ff41;
+            display: inline-block; /* Ensure it doesn't break line unnecessarily */
+        }
+        @keyframes typing { from { width: 0; } to { width: 100%; } }
+        @keyframes blink { 50% { border-color: transparent; } }
+        .glitch-name {
+            position: relative; color: #00ff41; animation: glitch-name 3s infinite linear;
+            white-space: nowrap; /* Prevent wrapping */
+            display: inline-block; /* Ensure proper layout */
+        }
+        .glitch-name::before, .glitch-name::after {
+            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
+            opacity: 0.6; /* Reduced opacity */
+        }
+        .glitch-name::before { animation: glitch-name-1 3s infinite linear; color: #ff0040; z-index: -1; }
+        .glitch-name::after  { animation: glitch-name-2 3s infinite linear; color: #00ffff; z-index: -2; }
+
+        @keyframes glitch-name { /* Refined Hero Name Glitch */
+            0%, 100% { transform: translate(0); }
+            10% { transform: translate(-0.3px, 0.3px); }
+            20% { transform: translate(0.3px, -0.3px); }
+            30% { transform: translate(0.1px, 0.1px); }
+            40% { transform: translate(-0.1px, -0.1px); }
+        }
+        @keyframes glitch-name-1 { /* Refined Hero Name Glitch ::before (red) */
+            0%, 100% { transform: translate(0); }
+            10% { transform: translate(0.3px, 0px); }
+            20% { transform: translate(-0.3px, 0px); }
+            30% { transform: translate(0.1px, 0.05px); }
+            40% { transform: translate(-0.1px, -0.05px); }
+        }
+        @keyframes glitch-name-2 { /* Refined Hero Name Glitch ::after (cyan) */
+            0%, 100% { transform: translate(0); }
+            10% { transform: translate(0px, -0.3px); }
+            20% { transform: translate(0px, 0.3px); }
+            30% { transform: translate(-0.05px, 0.1px); }
+            40% { transform: translate(0.05px, -0.1px); }
+        }
+
+        .hero-subtitle { font-size: 2rem; margin-bottom: 20px; color: #00ffff; }
+        .glitch-username {
+            position: relative; animation: glow 2s ease-in-out infinite alternate;
+        }
+        @keyframes glow {
+            from { text-shadow: 0 0 10px #00ffff; }
+            to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
+        }
+        .hero-description { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
+        .hero-buttons { display: flex; gap: 20px; }
+        .btn {
+            padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: 600;
+            transition: all 0.3s ease; position: relative; overflow: hidden;
+        }
+        .btn-primary {
+            background: linear-gradient(45deg, #00ff41, #00ffff); color: #1a1a2e;
+        }
+        .btn-secondary {
+            border: 2px solid #00ff41; color: #00ff41; background: transparent;
+        }
+        .btn:hover, .btn:focus { /* Combined hover and focus */
+            transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 255, 65, 0.4);
+        }
+        /* Remove default outline for focused elements */
+        a:focus, .btn:focus, .social-link:focus {
+            outline: none;
+        }
+
+        /* Floating Animation Elements */
+        .hero-animation { position: relative; height: 400px; }
+        .floating-element {
+            position: absolute; border-radius: 50%; animation: float 6s ease-in-out infinite;
+        }
+        .element-1 {
+            width: 80px; height: 80px; background: linear-gradient(45deg, #00ff41, transparent);
+            top: 10%; left: 10%; animation-delay: 0s;
+        }
+        .element-2 {
+            width: 60px; height: 60px; background: linear-gradient(45deg, #00ffff, transparent);
+            top: 60%; right: 20%; animation-delay: 2s;
+        }
+        .element-3 {
+            width: 100px; height: 100px; background: linear-gradient(45deg, #ff0040, transparent);
+            bottom: 20%; left: 60%; animation-delay: 4s;
+        }
+        @keyframes float {
+            0%, 100% { transform: translateY(0px) rotate(0deg); }
+            33% { transform: translateY(-20px) rotate(120deg); }
+            66% { transform: translateY(20px) rotate(240deg); }
+        }
+        /* Section Styles */
+        .section-title {
+            text-align: center; font-size: 2.5rem; margin-bottom: 50px; position: relative; color: #1a1a2e;
+        }
+        .section-title::after {
+            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
+            width: 80px; height: 3px; background: linear-gradient(45deg, #00ff41, #00ffff);
+        }
+        /* About Section */
+        .about { padding: 100px 0; background: #f8f9fa; }
+        .about-content {
+            display: grid; grid-template-columns: 2fr 1fr; gap: 50px; align-items: center;
+        }
+        .about-text p { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; }
+        .about-stats { display: flex; flex-direction: column; gap: 30px; }
+        .stat-item {
+            text-align: center; padding: 20px; background: white; border-radius: 10px;
+            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease;
+        }
+        .stat-item:hover { transform: translateY(-5px); }
+        .stat-item h3 { font-size: 1.5rem; color: #00ff41; margin-bottom: 10px; }
+        /* Skills Section */
+        .skills { padding: 100px 0; background: #1a1a2e; color: white; }
+        .skills .section-title { color: white; }
+        .skills-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+        }
+        .skill-card {
+            background: rgba(255, 255, 255, 0.1); padding: 40px 30px; border-radius: 15px; text-align: center;
+            backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 65, 0.3); transition: all 0.3s ease;
+        }
+        .skill-card:hover {
+            transform: translateY(-10px); border-color: #00ff41;
+            box-shadow: 0 20px 40px rgba(0, 255, 65, 0.2);
+        }
+        .skill-icon { font-size: 3rem; color: #00ff41; margin-bottom: 20px; }
+        .skill-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #00ffff; }
+        .skill-card p { opacity: 0.9; line-height: 1.6; }
+        /* Devices Section */
+        .devices { padding: 100px 0; background: #f8f9fa; }
+        .devices-grid {
+            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
+        }
+        .device-card {
+            background: white; padding: 40px 30px; border-radius: 15px; text-align: center;
+            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
+            position: relative; overflow: hidden;
+        }
+        .device-card::before {
+            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
+            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
+            transition: left 0.5s ease;
+        }
+        .device-card:hover::before { left: 100%; }
+        .device-card:hover {
+            transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
+        }
+        .device-icon { font-size: 3rem; color: #1a1a2e; margin-bottom: 20px; }
+        .device-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: #1a1a2e; }
+        .device-codename { color: #00ff41; font-weight: 600; margin-bottom: 15px; }
+        .device-card p:last-child { opacity: 0.8; line-height: 1.6; }
+        /* Contact Section */
+        .contact { padding: 100px 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; }
+        .contact .section-title { color: white; }
+        .contact-content { max-width: 600px; margin: 0 auto; text-align: center; }
+        .contact-info h3 { font-size: 2rem; margin-bottom: 20px; color: #00ff41; }
+        .contact-info p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
+        .social-links { display: flex; justify-content: center; gap: 30px; }
+        .social-link {
+            display: flex; flex-direction: column; align-items: center; gap: 10px;
+            color: white; text-decoration: none; padding: 20px; border-radius: 15px;
+            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
+            border: 1px solid rgba(0, 255, 65, 0.3); transition: all 0.3s ease;
+        }
+        .social-link:hover, .social-link:focus { /* Combined hover and focus */
+            transform: translateY(-5px); border-color: #00ff41;
+            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
+        }
+        .social-link i { font-size: 2rem; color: #00ff41; }
+        .social-link span { font-weight: 600; }
+        /* Responsive Design */
+        @media (max-width: 900px) {
+            .hero-container { grid-template-columns: 1fr; text-align: center; }
+            .hero-buttons { justify-content: center; } /* Center buttons in hero on smaller screens */
+            .about-content { grid-template-columns: 1fr; }
+        }
+        @media (max-width: 768px) {
+            .hamburger { display: flex; }
+            .nav-menu {
+                position: fixed; left: -100%; top: 70px; flex-direction: column;
+                background-color: rgba(26, 26, 46, 0.95); width: 100%; text-align: center;
+                transition: 0.3s; gap: 0;
+            }
+            .nav-menu.active { left: 0; }
+            .nav-menu li { padding: 15px 0; }
+            .social-links { flex-direction: column; align-items: center; }
+            .glitch-text { font-size: 2rem; } /* Preloader text */
+            .loading-bar { width: 250px; }
+        }
+        @media (max-width: 480px) {
+            .hero-title { font-size: 2.5rem; } /* Adjusted for better fit */
+            .hero-subtitle { font-size: 1.5rem; }
+            .section-title { font-size: 2rem; }
+            .glitch-text { font-size: 1.5rem; } /* Preloader text */
+            .glitch-logo { font-size: 1.2rem; } /* Further adjust logo on very small screens */
+        }
+    </style>
+</head>
+<body>
+    <!-- Preloader -->
+    <div class="loader-wrapper" id="loader">
+        <div class="glitch-loader">
+            <div class="glitch-text" data-text="GlitchWraith">GlitchWraith</div>
+            <div class="loading-bar">
+                <div class="loading-progress"></div>
+            </div>
+            <div class="loading-percentage">0%</div>
+        </div>
+    </div>
+    <!-- Navigation -->
+    <nav class="navbar">
+        <div class="nav-container">
+            <div class="nav-logo">
+                <span class="glitch-logo" data-text="GlitchWraith">GlitchWraith</span>
+            </div>
+            <ul class="nav-menu">
+                <li><a href="#home" class="nav-link">Home</a></li>
+                <li><a href="#about" class="nav-link">About</a></li>
+                <li><a href="#skills" class="nav-link">Skills</a></li>
+                <li><a href="#devices" class="nav-link">Devices</a></li>
+                <li><a href="#contact" class="nav-link">Contact</a></li>
+            </ul>
+            <div class="hamburger" tabindex="0"> <!-- Added tabindex for focusability -->
+                <span></span>
+                <span></span>
+                <span></span>
+            </div>
+        </div>
+    </nav>
+    <!-- Hero Section -->
+    <section id="home" class="hero">
+        <div class="hero-container">
+            <div class="hero-content">
+                <h1 class="hero-title">
+                    <span class="type-animation">Hi, I'm </span>
+                    <span class="glitch-name" data-text="Pranshu Sheoran">Pranshu Sheoran</span>
+                </h1>
+                <h2 class="hero-subtitle">
+                    aka <span class="glitch-username" data-text="GlitchWraith">GlitchWraith</span>
+                </h2>
+                <p class="hero-description">Frontend Developer & Custom ROM Creator</p>
+                <div class="hero-buttons">
+                    <a href="#about" class="btn btn-primary">Learn More</a>
+                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
+                </div>
+            </div>
+            <div class="hero-animation">
+                <div class="floating-element element-1"></div>
+                <div class="floating-element element-2"></div>
+                <div class="floating-element element-3"></div>
+            </div>
+        </div>
+    </section>
+    <!-- About Section -->
+    <section id="about" class="about">
+        <div class="container">
+            <h2 class="section-title">About Me</h2>
+            <div class="about-content">
+                <div class="about-text">
+                    <p>Welcome to my digital realm! I'm Pranshu Sheoran, better known in the tech community as GlitchWraith. Born on July 21st, I've always been fascinated by the intersection of creativity and technology.</p>
+                    <p>My journey in the tech world spans frontend web development and Android custom ROM development. I specialize in creating engaging user interfaces and optimizing Android experiences through custom firmware development.</p>
+                    <p>Beyond the world of code, I'm a proud pet parent to Jimmy, my lovely female dog, who brings a daily dose of joy and inspiration to my life.</p>
+                </div>
+                <div class="about-stats">
+                    <div class="stat-item">
+                        <h3>Frontend</h3>
+                        <p>Web Development</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>ROM</h3>
+                        <p>Development</p>
+                    </div>
+                    <div class="stat-item">
+                        <h3>Born</h3>
+                        <p>July 21</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Skills Section -->
+    <section id="skills" class="skills">
+        <div class="container">
+            <h2 class="section-title">Technical Skills</h2>
+            <div class="skills-grid">
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-html5"></i>
+                    </div>
+                    <h3>Frontend Development</h3>
+                    <p>Creating responsive and interactive web interfaces with modern technologies</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fab fa-android"></i>
+                    </div>
+                    <h3>Custom ROM Development</h3>
+                    <p>Building and optimizing custom Android firmware for enhanced performance</p>
+                </div>
+                <div class="skill-card">
+                    <div class="skill-icon">
+                        <i class="fas fa-code"></i>
+                    </div>
+                    <h3>Web Technologies</h3>
+                    <p>Proficient in HTML, CSS, JavaScript and modern web frameworks</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Devices Section -->
+    <section id="devices" class="devices">
+        <div class="container">
+            <h2 class="section-title">My Tech Arsenal</h2>
+            <div class="devices-grid">
+                <div class="device-card">
+                    <div class="device-icon">
+                        <i class="fas fa-tablet-alt"></i>
+                    </div>
+                    <h3>Xiaomi Pad 6</h3>
+                    <p class="device-codename">Codename: pipa</p>
+                    <p>Primary development device for custom ROM projects</p>
+                </div>
+                <div class="device-card">
+                    <div class="device-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>Asus Zenfone Max Pro M1</h3>
+                    <p class="device-codename">Codename: xootd</p>
+                    <p>Reliable daily driver with excellent battery life</p>
+                </div>
+                <div class="device-card">
+                    <div class="device-icon">
+                        <i class="fas fa-mobile-alt"></i>
+                    </div>
+                    <h3>IQOO Z3 5G</h3>
+                    <p class="device-codename">Performance Beast</p>
+                    <p>High-performance device for testing and development</p>
+                </div>
+            </div>
+        </div>
+    </section>
+    <!-- Contact Section -->
+    <section id="contact" class="contact">
+        <div class="container">
+            <h2 class="section-title">Get In Touch</h2>
+            <div class="contact-content">
+                <div class="contact-info">
+                    <h3>Let's Connect</h3>
+                    <p>Feel free to reach out for collaborations or just to say hello!</p>
+                    <div class="social-links">
+                        <a href="https://github.com/glitch-wraith" target="_blank" class="social-link">
+                            <i class="fab fa-github"></i>
+                            <span>GitHub</span>
+                        </a>
+                        <a href="https://t.me/glitch_wraith" target="_blank" class="social-link">
+                            <i class="fab fa-telegram"></i>
+                            <span>Telegram</span>
+                        </a>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </section>
+    <script>
+        // Preloader functionality
+        document.addEventListener('DOMContentLoaded', function() {
+            const loader = document.getElementById('loader');
+            const loadingProgress = document.querySelector('.loading-progress'); // Bar element
+            const loadingPercentage = document.querySelector('.loading-percentage'); // Text element
+            let progress = 0;
+
+            // CSS animation for loading-progress is 3s linear.
+            const animationDuration = 3000; // Must match CSS animation duration
+            const updateFrequency = 50; // Update text every 50ms
+            // Calculate how much percentage should increase each interval to match linear animation
+            const increment = 100 / (animationDuration / updateFrequency); 
+
+            const interval = setInterval(() => {
+                progress += increment;
+                if (progress > 100) {
+                    progress = 100;
+                }
+                loadingPercentage.textContent = Math.floor(progress) + '%';
+                
+                if (progress >= 100) {
+                    clearInterval(interval);
+                    // Ensure 100% is displayed before hiding
+                    loadingPercentage.textContent = '100%'; 
+                    setTimeout(() => {
+                        loader.classList.add('loader-hidden');
+                        document.body.style.overflowY = 'auto'; // Allow scrolling on Y axis
+                        // document.body.style.overflowX = 'hidden'; // Keep X axis hidden (already default)
+                        startHeroAnimations();
+                    }, 500); // Delay to allow fade-out transition of loader
+                }
+            }, updateFrequency);
+        });
+
+        // Start hero section animations (opacity and transform set to initial for JS animation)
+        function startHeroAnimations() {
+            const heroElementsToAnimate = [
+                document.querySelector('.hero-title'),
+                document.querySelector('.hero-subtitle'),
+                document.querySelector('.hero-description'),
+                document.querySelector('.hero-buttons')
+            ];
+
+            heroElementsToAnimate.forEach((el, index) => {
+                if (el) {
+                    el.style.opacity = '0'; // Set initial state for animation
+                    el.style.transform = 'translateY(30px)'; // Set initial state for animation
+                    setTimeout(() => {
+                        el.style.animation = `fadeInUp 0.8s ease forwards`;
+                    }, index * 200);
+                }
+            });
+        }
+        
+        // Add fadeInUp animation to CSS if not already via observer for other elements
+        // This one is specifically for hero elements after preloader
+        const heroAnimationStyle = document.createElement('style');
+        heroAnimationStyle.textContent = `
+            @keyframes fadeInUp {
+                from { opacity: 0; transform: translateY(30px); }
+                to { opacity: 1; transform: translateY(0); }
+            }
+        `;
+        document.head.appendChild(heroAnimationStyle);
+
+        // Smooth scrolling for navigation links
+        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
+            anchor.addEventListener('click', function (e) {
+                e.preventDefault();
+                const targetId = this.getAttribute('href');
+                const targetElement = document.querySelector(targetId);
+                if (targetElement) {
+                    // Calculate offset if navbar is fixed (it is, height 70px)
+                    const navbarHeight = document.querySelector('.navbar').offsetHeight || 70;
+                    const elementPosition = targetElement.getBoundingClientRect().top;
+                    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
+
+                    window.scrollTo({
+                        top: offsetPosition,
+                        behavior: 'smooth'
+                    });
+                }
+                 // Close mobile menu if active
+                if (navMenu.classList.contains('active')) {
+                    hamburger.classList.remove('active');
+                    navMenu.classList.remove('active');
+                }
+            });
+        });
+
+        // Mobile navigation toggle
+        const hamburger = document.querySelector('.hamburger');
+        const navMenu = document.querySelector('.nav-menu');
+        hamburger.addEventListener('click', () => {
+            hamburger.classList.toggle('active');
+            navMenu.classList.toggle('active');
+        });
+        // Also handle Enter key for hamburger (accessibility)
+        hamburger.addEventListener('keydown', (e) => {
+            if (e.key === 'Enter' || e.key === ' ') {
+                e.preventDefault(); // Prevent space from scrolling
+                hamburger.click();
+            }
+        });
+
+        // Close mobile menu when clicking on a link (already handled in smooth scroll, but good to have standalone if needed)
+        // document.querySelectorAll('.nav-link').forEach(n => n.addEventListener('click', () => {
+        //     hamburger.classList.remove('active');
+        //     navMenu.classList.remove('active');
+        // }));
+
+        // Navbar background on scroll
+        window.addEventListener('scroll', () => {
+            const navbar = document.querySelector('.navbar');
+            if (window.scrollY > 50) { // Reduced threshold for earlier effect
+                navbar.style.background = 'rgba(20, 20, 35, 0.98)'; // Slightly darker/different on scroll
+                navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
+            } else {
+                navbar.style.background = 'rgba(26, 26, 46, 0.95)';
+                navbar.style.boxShadow = 'none';
+            }
+        });
+
+        // Intersection Observer for animations on other sections
+        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
+        const sectionObserver = new IntersectionObserver((entries, observerInstance) => { // Renamed observer
+            entries.forEach(entry => {
+                if (entry.isIntersecting) {
+                    entry.target.style.opacity = '1';
+                    entry.target.style.transform = 'translateY(0)';
+                    entry.target.style.animation = 'fadeInUp 1s ease forwards'; // Apply animation
+                    observerInstance.unobserve(entry.target); // Unobserve after animation
+                }
+            });
+        }, observerOptions);
+        
+        document.querySelectorAll('.skill-card, .device-card, .stat-item, .about-text, .about-stats, .contact-info').forEach(el => {
+            el.style.opacity = '0'; // Initial state for IntersectionObserver
+            el.style.transform = 'translateY(30px)'; // Initial state for IntersectionObserver
+            sectionObserver.observe(el); // Use renamed observer
+        });
+
+        // Typing animation for hero section (modified to ensure it runs after preloader)
+        function typeWriter(element, text, speed, callback) {
+            let i = 0;
+            element.innerHTML = ''; // Clear existing content
+            element.style.borderRight = '3px solid #00ff41'; // Ensure border is visible
+            function type() {
+                if (i < text.length) {
+                    element.innerHTML += text.charAt(i);
+                    i++;
+                    setTimeout(type, speed);
+                } else {
+                    // Typing finished
+                    if (callback) callback();
+                    // Keep cursor blinking
+                    element.style.animation = 'blink 0.5s step-end infinite alternate';
+                }
+            }
+            type();
+        }
+        
+        // Initialize typing animation after preloader is done
+        // This is now part of startHeroAnimations flow
+        // Original window.onload was removed for preloader logic
+        // We'll call it from startHeroAnimations or rely on CSS for typing after preloader hidden
+        // The CSS animation `typing 2s steps(8)` is already set.
+        // To re-trigger it via JS after preloader:
+        // In startHeroAnimations or after loader.classList.add('loader-hidden'):
+        // const typeElement = document.querySelector('.type-animation');
+        // if (typeElement) {
+        //    typeElement.style.animation = 'none'; // Reset animation
+        //    typeElement.offsetHeight; /* trigger reflow */
+        //    typeElement.style.animation = ''; // Re-apply animation from CSS
+        // }
+        // For simplicity, let's assume the CSS animation starts fine after the element is visible.
+
+        // Parallax effect for floating elements (conflict with CSS float, be cautious)
+        // This JS parallax overrides the CSS 'float' animation transform.
+        // If you want both, it's more complex. For now, leaving as is.
+        window.addEventListener('scroll', () => {
+            const scrolled = window.pageYOffset;
+            const parallaxElements = document.querySelectorAll('.floating-element');
+            parallaxElements.forEach((element, index) => {
+                const speed = (index === 0 ? 0.2 : (index === 1 ? 0.3 : 0.15)); // Varied subtle speeds
+                // This combines with existing CSS animation if it doesn't also set transformY
+                // Since 'float' animation *does* set transformY, this will override it.
+                // A potential solution is to have CSS handle local animation (like rotate and small Y bob)
+                // and JS handle larger parallax scroll based Y.
+                // For example, in CSS float: remove translateY. JS handles translateY parallax.
+                element.style.transform = `translateY(${scrolled * speed}px) rotate(${scrolled * 0.05 * (index + 1)}deg)`;
+            });
+        });
+
+        // Add glitch effect on hover for certain elements (make it slightly more pronounced)
+        document.querySelectorAll('.glitch-name, .glitch-username').forEach(element => {
+            element.addEventListener('mouseenter', () => {
+                element.style.animationDuration = '0.2s'; // Faster, more intense on hover
+                element.style.animationIterationCount = 'infinite'; // Ensure it keeps glitching
+            });
+            element.addEventListener('mouseleave', () => {
+                element.style.animationDuration = '3s'; // Back to normal speed
+            });
+        });
+
+        // Dynamic background particles (optional enhancement)
+        // Reduced frequency for performance
+        let particleInterval;
+        function startParticles() {
+             if (window.innerWidth > 768) { // Only on larger screens
+                particleInterval = setInterval(createParticle, 500); // Less frequent
+            }
+        }
+        function stopParticles() {
+            clearInterval(particleInterval);
+        }
+        function createParticle() {
+            const particle = document.createElement('div');
+            particle.style.position = 'fixed';
+            particle.style.width = Math.random() * 2 + 1 + 'px'; // Vary size
+            particle.style.height = particle.style.width;
+            particle.style.background = Math.random() > 0.5 ? '#00ff41' : '#00ffff'; // Vary color
+            particle.style.borderRadius = '50%';
+            particle.style.left = Math.random() * window.innerWidth + 'px';
+            particle.style.top = '-10px';
+            particle.style.pointerEvents = 'none';
+            particle.style.zIndex = '1'; // Ensure they are behind most content if needed, or above hero bg
+            particle.style.opacity = Math.random() * 0.5 + 0.3; // Vary opacity
+            
+            document.body.appendChild(particle);
+
+            const animation = particle.animate([
+                { transform: `translateY(0px) translateX(${Math.random()*20-10}px)`, opacity: parseFloat(particle.style.opacity) },
+                { transform: `translateY(${window.innerHeight + 10}px) translateX(${Math.random()*100-50}px)`, opacity: 0 }
+            ], {
+                duration: Math.random() * 4000 + 3000, // Slower, longer duration
+                easing: 'linear'
+            });
+            animation.onfinish = () => { particle.remove(); };
+        }
+        // Start particles after everything is loaded and preloader is gone
+        window.addEventListener('load', () => {
+           // This will be after DOMContentLoaded and preloader script
+           // Ensure it's called after preloader is hidden
+           setTimeout(startParticles, 3500); // Delay to ensure preloader is gone
+        });
+
+
+        // Console Easter Egg
+        console.log('🔥 Welcome to GlitchWraith\'s Portfolio! 🔥');
+        console.log('Feel free to explore the code. Built with passion!');
+    </script>
+</body>
+</html>
