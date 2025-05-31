@@ -21,6 +21,16 @@
             padding: 0 20px;
         }
 
+        /* ADDED: Remove tap highlight for mobile browsers on interactive elements */
+        a,
+        button,
+        input,
+        textarea,
+        select,
+        [tabindex] {
+            -webkit-tap-highlight-color: transparent;
+        }
+
         /* Preloader Styles - Updated */
         .loader-wrapper {
             position: fixed;
@@ -214,7 +224,7 @@
         .btn:hover, .btn:focus { 
             transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 255, 65, 0.4);
         }
-        a:focus, .btn:focus, .social-link:focus {
+        a:focus, .btn:focus, .social-link:focus { /* This is still good for general focus outlines */
             outline: none;
         }
 
