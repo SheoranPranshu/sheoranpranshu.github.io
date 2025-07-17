@@ -31,24 +31,13 @@
             -webkit-tap-highlight-color: transparent;
         }
 
-        /* NEW: Cursor styles for interactive elements */
-        a, button, .btn, .social-link, .mobile-nav-link-main, 
-        .mobile-nav-btn-main, .hamburger, .nav-link {
-            cursor: pointer;
-        }
-
-        /* NEW: Preload cursor images */
-        body::after {
-            content: "";
-            position: absolute;
-            width: 0;
-            height: 0;
-            overflow: hidden;
-            background-image: 
-                url('cursor4/frame1.png'),
-                url('cursor4/frame2.png'),
-                url('cursor4/frame3.png');
-        }
+        {background: white;
+      color: white;
+      font-family: sans-serif;
+      height: 100vh;
+      display: flex;
+      justify-content: center;
+      align-items: center;}
 
         /* Preloader Styles - Updated */
         .loader-wrapper {
@@ -746,6 +735,7 @@
     </div>
 
     <script>
+
         document.addEventListener('DOMContentLoaded', function() {
             const loader = document.getElementById('loader');
             let heroAnimationsHaveBeenStarted = false;
@@ -759,7 +749,6 @@
                         startHeroAnimations();
                         heroAnimationsHaveBeenStarted = true;
                     }
-                    setupAnimatedCursor(); // NEW: Initialize cursor
                 }
             }
             
@@ -841,70 +830,6 @@
                 }
             });
         });
-
-        // NEW: Animated cursor functionality
-        function setupAnimatedCursor() {
-            // Only enable on non-touch devices
-            if (!('ontouchstart' in window || navigator.maxTouchPoints)) {
-                const folder = "cursor4";  
-                const frameCount = 3; 
-                const frames = [];
-
-                // Preload cursor images
-                for (let i = 1; i <= frameCount; i++) {
-                    const img = new Image();
-                    img.src = `${folder}/frame${i}.png`;
-                    frames.push(img.src);
-                }
-
-                let index = 0;
-                const fps = 10;
-                let cursorInterval = null;
-                
-                // Apply animated cursor
-                function setNextCursor() {
-                    document.body.style.cursor = `url(${frames[index]}), auto`;
-                    index = (index + 1) % frames.length;
-                }
-                
-                function startCursorAnimation() {
-                    if (cursorInterval !== null) return;
-                    cursorInterval = setInterval(setNextCursor, 1000 / fps);
-                }
-                
-                function stopCursorAnimation() {
-                    if (cursorInterval === null) return;
-                    clearInterval(cursorInterval);
-                    cursorInterval = null;
-                    document.body.style.cursor = 'auto';
-                }
-                
-                // Preload images and then start animation
-                Promise.all(frames.map(src => 
-                    new Promise((resolve, reject) => {
-                        const img = new Image();
-                        img.onload = resolve;
-                        img.onerror = reject;
-                        img.src = src;
-                    })
-                ))
-                .then(() => {
-                    startCursorAnimation();
-                    
-                    // Handle tab visibility
-                    document.addEventListener('visibilitychange', () => {
-                        if (document.hidden) {
-                            stopCursorAnimation();
-                        } else {
-                            startCursorAnimation();
-                        }
-                    });
-                })
-                .catch(error => {
-                    console.error('Failed to load cursor images:', error);
-                });
-            }
-        }
 
         // OLD Hamburger logic (commented out)
         /*
@@ -1039,6 +964,27 @@
 
         console.log('💀 GlitchWraith\'s Portfolio v2.1 Activated 💀');
         console.log('Remember to replace placeholder SVGs with your cool skeleton!');
+        
+// Chnage folder and framecount here 
+  const folder = "cursor4";  
+  const frameCount = 3; 
+  
+  const frames = [];
+
+  for (let i = 1; i <= frameCount; i++) {
+    frames.push(`${folder}/frame${i}.png`);
+  }
+
+  let index = 0;
+  const fps = 10;
+
+  setInterval(() => {
+    document.body.style.cursor =
+     `url(${frames[index]}), auto`;
+    index = (index + 1) % frames.length;
+  }, 2000 / fps);
+        
+        
     </script>
 </body>
 </html>
