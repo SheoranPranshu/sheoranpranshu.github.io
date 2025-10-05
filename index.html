@@ -3,532 +3,53 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Pranshu Sheoran | GlitchWraith</title>
-    <meta name="description" content="Portfolio of Pranshu Sheoran (GlitchWraith) - Frontend Developer & Custom ROM Creator">
-    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0/css/all.min.css">
-    <style>
-        * { margin: 0; padding: 0; box-sizing: border-box; }
-        body {
-            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
-            line-height: 1.6;
-            color: #333;
-            overflow-x: hidden;
-            overflow-y: hidden; /* Initially hide scrollbar until preloader is gone */
-        }
-        .container {
-            max-width: 1200px;
-            margin: 0 auto;
-            padding: 0 20px;
-        }
-
-        /* ADDED: Remove tap highlight for mobile browsers on interactive elements */
-        a,
-        button,
-        input,
-        textarea,
-        select,
-        [tabindex] {
-            -webkit-tap-highlight-color: transparent;
-        }
-
-        {background: white;
-      color: white;
-      font-family: sans-serif;
-      height: 100vh;
-      display: flex;
-      justify-content: center;
-      align-items: center;}
-
-        /* Preloader Styles - Updated */
-        .loader-wrapper {
-            position: fixed;
-            top: 0; left: 0; width: 100%; height: 100%;
-            background: linear-gradient(135deg, #4A00E0 0%, #8E2DE2 100%); /* New gradient */
-            display: flex; flex-direction: column; justify-content: center; align-items: center;
-            z-index: 9999;
-            transition: opacity 0.8s ease, visibility 0.8s ease;
-        }
-        .preloader-skeleton-container {
-            width: 150px; /* Adjust size */
-            height: 180px; /* Adjust size */
-            position: relative;
-        }
-        #waving-skeleton-svg {
-            width: 100%;
-            height: 100%;
-            fill: white;
-            animation: skeleton-appear-and-wave 2s ease-in-out forwards; /* Single animation cycle */
-        }
-        
-        @keyframes skeleton-appear-and-wave {
-            0% {
-                opacity: 0;
-                transform: scale(0.5) translateY(30px);
-            }
-            40% {
-                opacity: 1;
-                transform: scale(1) translateY(0);
-            }
-            50% { transform: scale(1) translateY(0) rotate(-5deg); }
-            60% { transform: scale(1) translateY(-5px) rotate(5deg); }
-            70% { transform: scale(1) translateY(0) rotate(-3deg); }
-            80% { transform: scale(1) translateY(-2px) rotate(3deg); }
-            90%, 100% {
-                opacity: 1; 
-                transform: scale(1) translateY(0) rotate(0deg);
-            }
-        }
-
-        .loader-info-text {
-            margin-top: 25px;
-            color: white;
-            font-size: 1.3rem;
-            font-weight: 500;
-            opacity: 0;
-            animation: text-fade-in 1s ease forwards 0.5s; 
-        }
-
-        @keyframes text-fade-in {
-            to { opacity: 1; }
-        }
-
-        .loader-hidden { 
-            opacity: 0; 
-            visibility: hidden; 
-            pointer-events: none; 
-        }
-
-        /* Navigation */
-        .navbar {
-            position: fixed; top: 0; width: 100%;
-            background: rgba(26, 26, 46, 0.95);
-            backdrop-filter: blur(10px);
-            z-index: 1000; transition: all 0.3s ease;
-        }
-        .nav-container {
-            max-width: 1200px; margin: 0 auto; padding: 0 20px;
-            display: flex; justify-content: space-between; align-items: center; height: 70px;
-        }
-        .glitch-logo {
-            font-size: 1.4rem; 
-            font-weight: bold; color: #00ff41; position: relative;
-            animation: logo-glow 3s ease-in-out infinite alternate;
-        }
-        @keyframes logo-glow {
-            from { text-shadow: 0 0 10px #00ff41; }
-            to { text-shadow: 0 0 20px #00ff41, 0 0 30px #00ff41; }
-        }
-        .nav-menu { display: flex; list-style: none; gap: 30px; }
-        .nav-link {
-            color: white; text-decoration: none; font-weight: 500; position: relative; transition: color 0.3s ease;
-        }
-        .nav-link:hover, .nav-link:focus { color: #00ff41; } 
-        .nav-link::after {
-            content: ''; position: absolute; bottom: -5px; left: 0; width: 0; height: 2px;
-            background: #00ff41; transition: width 0.3s ease;
-        }
-        .nav-link:hover::after, .nav-link:focus::after { width: 100%; } 
-        .hamburger { display: none; flex-direction: column; cursor: pointer; padding: 5px; } 
-        .hamburger span { width: 25px; height: 3px; background: white; margin: 3px 0; transition: 0.3s; }
-        .hamburger:focus {
-            outline: 2px solid #00ff41;
-            outline-offset: 2px;
-        }
-
-        /* Hero Section */
-        .hero {
-            min-height: 100vh;
-            background: linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #1a1a2e 100%);
-            display: flex; align-items: center; position: relative; overflow: hidden;
-            padding-top: 70px; /* FIXED: Added padding for navbar height */
-            /* box-sizing: border-box; Already global */
-        }
-        .hero-container {
-            width: 100%; max-width: 1200px; margin: 0 auto; padding: 0 20px;
-            display: grid; grid-template-columns: 1fr 1fr; gap: 50px; align-items: center;
-        }
-        .hero-content { color: white; z-index: 2; position: relative; }
-        
-        .hero-title-container { 
-            position: relative;
-            display: inline-block; 
-            margin-bottom: 20px;
-        }
-        .hero-title { font-size: 3.5rem; line-height: 1.2;  }
-        .type-animation {
-            animation: typing 2s steps(8), blink 0.5s step-end infinite alternate;
-            overflow: hidden; white-space: nowrap; border-right: 3px solid #00ff41;
-            display: inline-block; 
-        }
-        @keyframes typing { from { width: 0; } to { width: 100%; } }
-        @keyframes blink { 50% { border-color: transparent; } }
-        
-        .glitch-name {
-            position: relative; color: #00ff41; animation: glitch-name 3s infinite linear;
-            white-space: nowrap; 
-            display: inline-block; 
-            z-index: 1; 
-        }
-        .glitch-name::before, .glitch-name::after {
-            content: attr(data-text); position: absolute; top: 0; left: 0; width: 100%; height: 100%;
-            opacity: 0.6; 
-        }
-        .glitch-name::before { animation: glitch-name-1 3s infinite linear; color: #ff0040; z-index: -1; }
-        .glitch-name::after  { animation: glitch-name-2 3s infinite linear; color: #00ffff; z-index: -2; }
-
-        @keyframes glitch-name { 
-            0%, 100% { transform: translate(0); } 10% { transform: translate(-0.3px, 0.3px); }
-            20% { transform: translate(0.3px, -0.3px); } 30% { transform: translate(0.1px, 0.1px); }
-            40% { transform: translate(-0.1px, -0.1px); }
-        }
-        @keyframes glitch-name-1 { 
-            0%, 100% { transform: translate(0); } 10% { transform: translate(0.3px, 0px); }
-            20% { transform: translate(-0.3px, 0px); } 30% { transform: translate(0.1px, 0.05px); }
-            40% { transform: translate(-0.1px, -0.05px); }
-        }
-        @keyframes glitch-name-2 { 
-            0%, 100% { transform: translate(0); } 10% { transform: translate(0px, -0.3px); }
-            20% { transform: translate(0px, 0.3px); } 30% { transform: translate(-0.05px, 0.1px); }
-            40% { transform: translate(0.05px, -0.1px); }
-        }
-
-        .standing-skeleton-hero-container {
-            position: absolute;
-            bottom: -40px; 
-            left: -160px; 
-            width: 220px; 
-            height: auto;
-            z-index: 0; 
-            opacity: 0.6; 
-            pointer-events: none; 
-            transform: rotate(-8deg) scaleX(-1); 
-        }
-        .standing-skeleton-hero-container svg {
-            width: 100%;
-            height: 100%;
-            fill: #708090; 
-        }
-
-        .hero-subtitle { font-size: 2rem; margin-bottom: 20px; color: #00ffff; }
-        .glitch-username {
-            position: relative; animation: glow 2s ease-in-out infinite alternate;
-        }
-        @keyframes glow {
-            from { text-shadow: 0 0 10px #00ffff; }
-            to { text-shadow: 0 0 20px #00ffff, 0 0 30px #00ffff; }
-        }
-        .hero-description { font-size: 1.2rem; margin-bottom: 30px; opacity: 0.9; }
-        .hero-buttons { display: flex; gap: 20px; }
-        .btn {
-            padding: 12px 30px; text-decoration: none; border-radius: 50px; font-weight: 600;
-            transition: all 0.3s ease; position: relative; overflow: hidden;
-        }
-        .btn-primary {
-            background: linear-gradient(45deg, #00ff41, #00ffff); color: #1a1a2e;
-        }
-        .btn-secondary {
-            border: 2px solid #00ff41; color: #00ff41; background: transparent;
-        }
-        .btn:hover, .btn:focus { 
-            transform: translateY(-3px); box-shadow: 0 10px 30px rgba(0, 255, 65, 0.4);
-        }
-        a:focus, .btn:focus, .social-link:focus { /* This is still good for general focus outlines */
-            outline: none;
-        }
-
-        /* Floating Animation Elements */
-        .hero-animation { position: relative; height: 400px; }
-        .floating-element {
-            position: absolute; border-radius: 50%; animation: float 6s ease-in-out infinite;
-        }
-        .element-1 {
-            width: 80px; height: 80px; background: linear-gradient(45deg, #00ff41, transparent);
-            top: 10%; left: 10%; animation-delay: 0s;
-        }
-        .element-2 {
-            width: 60px; height: 60px; background: linear-gradient(45deg, #00ffff, transparent);
-            top: 60%; right: 20%; animation-delay: 2s;
-        }
-        .element-3 {
-            width: 100px; height: 100px; background: linear-gradient(45deg, #ff0040, transparent);
-            bottom: 20%; left: 60%; animation-delay: 4s;
-        }
-        @keyframes float {
-            0%, 100% { transform: translateY(0px) rotate(0deg); }
-            33% { transform: translateY(-20px) rotate(120deg); }
-            66% { transform: translateY(20px) rotate(240deg); }
-        }
-        /* Section Styles */
-        .section-title {
-            text-align: center; font-size: 2.5rem; margin-bottom: 50px; position: relative; color: #1a1a2e;
-        }
-        .section-title::after {
-            content: ''; position: absolute; bottom: -10px; left: 50%; transform: translateX(-50%);
-            width: 80px; height: 3px; background: linear-gradient(45deg, #00ff41, #00ffff);
-        }
-        /* About Section */
-        .about { padding: 100px 0; background: #f8f9fa; }
-        .about-content {
-            display: grid; grid-template-columns: 2fr 1fr; gap: 50px; align-items: center;
-        }
-        .about-text p { margin-bottom: 20px; font-size: 1.1rem; line-height: 1.8; }
-        .about-stats { display: flex; flex-direction: column; gap: 30px; }
-        .stat-item {
-            text-align: center; padding: 20px; background: white; border-radius: 10px;
-            box-shadow: 0 5px 20px rgba(0, 0, 0, 0.1); transition: transform 0.3s ease;
-        }
-        .stat-item:hover { transform: translateY(-5px); }
-        .stat-item h3 { font-size: 1.5rem; color: #00ff41; margin-bottom: 10px; }
-        /* Skills Section */
-        .skills { padding: 100px 0; background: #1a1a2e; color: white; }
-        .skills .section-title { color: white; }
-        .skills-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
-        }
-        .skill-card {
-            background: rgba(255, 255, 255, 0.1); padding: 40px 30px; border-radius: 15px; text-align: center;
-            backdrop-filter: blur(10px); border: 1px solid rgba(0, 255, 65, 0.3); transition: all 0.3s ease;
-        }
-        .skill-card:hover {
-            transform: translateY(-10px); border-color: #00ff41;
-            box-shadow: 0 20px 40px rgba(0, 255, 65, 0.2);
-        }
-        .skill-icon { font-size: 3rem; color: #00ff41; margin-bottom: 20px; }
-        .skill-card h3 { font-size: 1.5rem; margin-bottom: 15px; color: #00ffff; }
-        .skill-card p { opacity: 0.9; line-height: 1.6; }
-        
-        /* Projects Section */
-        .projects { padding: 100px 0; background: #f0f2f5; }
-        .projects .section-title { color: #1a1a2e; }
-        .projects-grid {
-            display: grid;
-            grid-template-columns: repeat(auto-fit, minmax(300px, 1fr));
-            gap: 40px;
-        }
-        .project-card {
-            background: white; padding: 30px; border-radius: 15px; text-align: center;
-            box-shadow: 0 5px 25px rgba(0, 0, 0, 0.1);
-            transition: all 0.3s ease;
-            display: flex;
-            flex-direction: column;
-            justify-content: space-between; 
-        }
-        .project-card:hover {
-            transform: translateY(-10px);
-            box-shadow: 0 15px 35px rgba(0, 0, 0, 0.15);
-        }
-        .project-icon { font-size: 2.5rem; color: #007bff; margin-bottom: 20px; }
-        .project-card h3 { font-size: 1.4rem; margin-bottom: 10px; color: #1a1a2e; }
-        .project-card p { opacity: 0.8; line-height: 1.6; margin-bottom: 20px; font-size: 0.95rem; flex-grow: 1;}
-        .btn-project {
-            background: linear-gradient(45deg, #0062E6, #33AEFF); 
-            color: white;
-            padding: 10px 25px;
-            text-decoration: none;
-            border-radius: 50px;
-            font-weight: 500;
-            transition: all 0.3s ease;
-            display: inline-block;
-            margin-top: auto; 
-            border: none;
-        }
-        .btn-project:hover, .btn-project:focus {
-            transform: translateY(-2px) scale(1.03);
-            box-shadow: 0 8px 20px rgba(0, 98, 230, 0.3);
-            outline: none;
-        }
-
-        /* Devices Section */
-        .devices { padding: 100px 0; background: #f8f9fa; }
-        .devices-grid {
-            display: grid; grid-template-columns: repeat(auto-fit, minmax(300px, 1fr)); gap: 40px;
-        }
-        .device-card {
-            background: white; padding: 40px 30px; border-radius: 15px; text-align: center;
-            box-shadow: 0 5px 30px rgba(0, 0, 0, 0.1); transition: all 0.3s ease;
-            position: relative; overflow: hidden;
-        }
-        .device-card::before {
-            content: ''; position: absolute; top: 0; left: -100%; width: 100%; height: 100%;
-            background: linear-gradient(90deg, transparent, rgba(0, 255, 65, 0.1), transparent);
-            transition: left 0.5s ease;
-        }
-        .device-card:hover::before { left: 100%; }
-        .device-card:hover {
-            transform: translateY(-10px); box-shadow: 0 15px 40px rgba(0, 0, 0, 0.2);
-        }
-        .device-icon { font-size: 3rem; color: #1a1a2e; margin-bottom: 20px; }
-        .device-card h3 { font-size: 1.5rem; margin-bottom: 10px; color: #1a1a2e; }
-        .device-codename { color: #00ff41; font-weight: 600; margin-bottom: 15px; }
-        .device-card p:last-child { opacity: 0.8; line-height: 1.6; }
-        /* Contact Section */
-        .contact { padding: 100px 0; background: linear-gradient(135deg, #1a1a2e 0%, #16213e 100%); color: white; }
-        .contact .section-title { color: white; }
-        .contact-content { max-width: 600px; margin: 0 auto; text-align: center; }
-        .contact-info h3 { font-size: 2rem; margin-bottom: 20px; color: #00ff41; }
-        .contact-info p { font-size: 1.2rem; margin-bottom: 40px; opacity: 0.9; }
-        .social-links { display: flex; justify-content: center; gap: 30px; }
-        .social-link {
-            display: flex; flex-direction: column; align-items: center; gap: 10px;
-            color: white; text-decoration: none; padding: 20px; border-radius: 15px;
-            background: rgba(255, 255, 255, 0.1); backdrop-filter: blur(10px);
-            border: 1px solid rgba(0, 255, 65, 0.3); transition: all 0.3s ease;
-        }
-        .social-link:hover, .social-link:focus { 
-            transform: translateY(-5px); border-color: #00ff41;
-            box-shadow: 0 10px 30px rgba(0, 255, 65, 0.3);
-        }
-        .social-link i { font-size: 2rem; color: #00ff41; }
-        .social-link span { font-weight: 600; }
-
-
-        /* NEW Mobile Navigation Styles */
-        .mobile-nav-btn-main {
-            display: none; 
-            position: fixed;
-            bottom: 20px;
-            right: 20px;
-            width: 60px;
-            height: 60px;
-            border-radius: 50%;
-            background: #00ff41; 
-            color: #1a1a2e; 
-            z-index: 1000;
-            border: none;
-            box-shadow: 0 0 20px rgba(0, 255, 65, 0.5);
-            font-size: 1.5rem;
-            cursor: pointer;
-            transition: all 0.3s ease;
-            align-items: center; 
-            justify-content: center;
-        }
-        .mobile-nav-btn-main:hover {
-            transform: scale(1.1);
-            background: #00e639; 
-        }
-        .mobile-nav-btn-main:focus { 
-            outline: 2px solid #00ff41;
-            outline-offset: 2px;
-        }
-        .mobile-nav-container-main {
-            position: fixed;
-            bottom: 90px; 
-            right: 20px;
-            display: flex;
-            flex-direction: column;
-            gap: 10px;
-            z-index: 999;
-            opacity: 0;
-            transform: translateY(20px);
-            pointer-events: none;
-            transition: opacity 0.3s ease, transform 0.3s ease, visibility 0.3s ease;
-            visibility: hidden; 
-        }
-        .mobile-nav-container-main.open {
-            opacity: 1;
-            transform: translateY(0);
-            pointer-events: all;
-            visibility: visible; 
-        }
-        .mobile-nav-link-main {
-            display: flex;
-            align-items: center;
-            width: auto; 
-            min-width: 50px; 
-            height: 50px;
-            padding: 0 15px 0 10px; 
-            border-radius: 25px; 
-            background: rgba(26, 26, 46, 0.95); 
-            color: white;
-            text-decoration: none;
-            font-weight: 500;
-            box-shadow: 0 0 15px rgba(0, 0, 0, 0.5);
-            transition: all 0.3s ease;
-            border: 1px solid rgba(0, 255, 65, 0.3); 
-        }
-        .mobile-nav-link-main i {
-            margin-right: 10px; 
-            color: #00ff41; 
-            width: 1.2em;
-            text-align: center;
-        }
-        .mobile-nav-link-main:hover, .mobile-nav-link-main:focus  {
-            transform: scale(1.05) translateX(-5px);
-            background: #00ff41; 
-            color: #1a1a2e; 
-            border-color: #00ff41;
-        }
-         .mobile-nav-link-main:hover i, .mobile-nav-link-main:focus i {
-            color: #1a1a2e; 
-        }
-
-        /* Responsive Design */
-        @media (max-width: 900px) {
-            .hero-container { grid-template-columns: 1fr; text-align: center; }
-            .hero-buttons { justify-content: center; } 
-            .about-content { grid-template-columns: 1fr; }
-            .standing-skeleton-hero-container { left: 50%; transform: translateX(-50%) translateY(10px) rotate(-8deg) scaleX(-1); bottom: -60px; width:180px; } 
-            .hero-title-container { text-align: center; }
-        }
-        @media (max-width: 768px) {
-            /* Hide original mobile nav parts and show new one */
-            .navbar .nav-menu { 
-                display: none !important; 
-            }
-            .navbar .hamburger { 
-                display: none !important; 
-            }
-            .mobile-nav-btn-main {
-                display: flex; /* Show the new button */
-            }
-            /* Old hamburger and nav-menu styles are now effectively disabled by the above */
-
-            .social-links { flex-direction: column; align-items: center; }
-            .preloader-skeleton-container { width: 120px; height: 150px; }
-            .standing-skeleton-hero-container { width: 150px; bottom: -50px; opacity: 0.5;}
-        }
-        @media (max-width: 480px) {
-            .hero-title { font-size: 2.5rem; } 
-            .hero-subtitle { font-size: 1.5rem; }
-            .section-title { font-size: 2rem; }
-            .preloader-skeleton-container { width: 100px; height: 120px; }
-            .loader-info-text { font-size: 1.1rem; }
-            .glitch-logo { font-size: 1.2rem; } 
-            .standing-skeleton-hero-container { width: 120px; bottom: -40px; opacity: 0.4;}
-        }
-    </style>
+    <title>Pranshu Sheoran | GlitchWraith - Frontend Developer & Custom ROM Creator</title>
+    <meta name="description" content="Portfolio of Pranshu Sheoran (GlitchWraith) - Frontend Developer specializing in modern web technologies and Android custom ROM development">
+    <meta name="keywords" content="Frontend Developer, Custom ROM, Android Development, Web Development, GlitchWraith, Pranshu Sheoran">
+    <meta name="author" content="Pranshu Sheoran">
+    
+    <link rel="preconnect" href="https://cdnjs.cloudflare.com">
+    <link rel="dns-prefetch" href="https://cdnjs.cloudflare.com">
+    
+    <link rel="preload" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" as="style" onload="this.onload=null;this.rel='stylesheet'">
+    <noscript><link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css"></noscript>
+    
+    <link rel="stylesheet" href="index.css">
+    
+    <meta property="og:title" content="Pranshu Sheoran | GlitchWraith">
+    <meta property="og:description" content="Frontend Developer & Custom ROM Creator">
+    <meta property="og:type" content="website">
+    <meta property="og:url" content="https://yourwebsite.com">
+    
+    <meta name="twitter:card" content="summary_large_image">
+    <meta name="twitter:title" content="Pranshu Sheoran | GlitchWraith">
+    <meta name="twitter:description" content="Frontend Developer & Custom ROM Creator">
+    
+    <meta name="theme-color" content="#0f1226">
 </head>
-<body>
-    <!-- Preloader -->
-    <div class="loader-wrapper" id="loader">
-        <div class="preloader-skeleton-container">
-            <svg id="waving-skeleton-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                <g class="skeleton-body">
-                    <circle cx="50" cy="20" r="10" />
-                    <rect x="45" y="30" width="10" height="25" />
-                    <g class="arm" id="skeleton-left-arm">
-                       <line x1="45" y1="35" x2="30" y2="45" stroke="white" stroke-width="4"/>
-                       <line x1="30" y1="45" x2="35" y2="60" stroke="white" stroke-width="4"/>
-                    </g>
-                     <g class="arm" id="skeleton-right-arm"> 
-                       <line x1="55" y1="35" x2="70" y2="45" stroke="white" stroke-width="4"/>
-                       <line x1="70" y1="45" x2="65" y2="60" stroke="white" stroke-width="4"/>
-                    </g>
-                    <line x1="45" y1="55" x2="40" y2="75" stroke="white" stroke-width="4"/>
-                    <line x1="55" y1="55" x2="60" y2="75" stroke="white" stroke-width="4"/>
+<body class="loading">
+    <div class="preloader" id="preloader" role="status" aria-live="polite">
+        <div class="preloader-content">
+            <svg class="preloader-svg" viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
+                <g class="outer">
+                    <rect x="20" y="20" width="60" height="60" rx="8" />
+                </g>
+                <g class="inner">
+                    <rect x="35" y="35" width="30" height="30" rx="4" />
+                </g>
+                <g class="center">
+                    <circle cx="50" cy="50" r="5" />
                 </g>
             </svg>
+            <p class="preloader-text">INITIALIZING</p>
         </div>
-        <p class="loader-info-text">Brewing something cool...</p>
     </div>
 
-    <!-- Navigation -->
-    <nav class="navbar">
-        <div class="nav-container">
-            <div class="nav-logo">
-                <span class="glitch-logo" data-text="GlitchWraith">GlitchWraith</span>
-            </div>
-            <ul class="nav-menu"> <!-- This will be hidden on mobile by CSS -->
+    <header id="header">
+        <nav class="container" role="navigation" aria-label="Main navigation">
+            <a href="#home" class="logo" aria-label="GlitchWraith Home">GlitchWraith</a>
+            
+            <ul class="nav-menu" role="list">
                 <li><a href="#home" class="nav-link">Home</a></li>
                 <li><a href="#about" class="nav-link">About</a></li>
                 <li><a href="#skills" class="nav-link">Skills</a></li>
@@ -536,455 +57,187 @@
                 <li><a href="#devices" class="nav-link">Devices</a></li>
                 <li><a href="#contact" class="nav-link">Contact</a></li>
             </ul>
-            <div class="hamburger" tabindex="0"> <!-- This will be hidden on mobile by CSS -->
+            
+            <button class="mobile-menu-btn" aria-label="Toggle mobile menu" aria-expanded="false">
                 <span></span>
                 <span></span>
                 <span></span>
-            </div>
-        </div>
-    </nav>
+            </button>
+        </nav>
+    </header>
 
-    <!-- Hero Section -->
-    <section id="home" class="hero">
-        <div class="hero-container">
-            <div class="hero-content">
-                <div class="hero-title-container">
-                    <h1 class="hero-title">
-                        <span class="type-animation">Hi, I'm </span>
-                        <span class="glitch-name" data-text="Pranshu Sheoran">Pranshu Sheoran</span>
+    <main>
+        <section id="home" class="hero" aria-label="Hero section">
+            <div class="hero-bg" aria-hidden="true">
+                <canvas id="particleCanvas"></canvas>
+            </div>
+            <div class="container">
+                <div class="hero-content">
+                    <h1>
+                        Hi, I'm <span class="hero-name">Pranshu Sheoran</span>
                     </h1>
-                    <div class="standing-skeleton-hero-container">
-                        <svg viewBox="0 0 100 100" xmlns="http://www.w3.org/2000/svg">
-                            <g class="skeleton-body-hero">
-                                <circle cx="50" cy="20" r="12" />
-                                <rect x="44" y="30" width="12" height="30" rx="3"/>
-                                <path d="M44 38 Q 30 40, 25 55 L 28 57 Q 35 45, 44 42 Z" />
-                                <path d="M56 38 L 65 60 L 62 61 L 53 40 Z" />
-                                <path d="M44 60 L 38 85 L 42 86 L 47 61 Z" />
-                                <path d="M56 60 L 62 85 L 58 86 L 53 61 Z" />
-                            </g>
-                        </svg>
+                    <h2>aka GlitchWraith</h2>
+                    <p class="hero-description">Frontend Developer & Custom ROM Creator</p>
+                    <div class="hero-buttons">
+                        <a href="#about" class="btn btn-primary">Learn More</a>
+                        <a href="#contact" class="btn btn-secondary">Get In Touch</a>
                     </div>
                 </div>
-                <h2 class="hero-subtitle">
-                    aka <span class="glitch-username" data-text="GlitchWraith">GlitchWraith</span>
-                </h2>
-                <p class="hero-description">Frontend Developer & Custom ROM Creator</p>
-                <div class="hero-buttons">
-                    <a href="#about" class="btn btn-primary">Learn More</a>
-                    <a href="#contact" class="btn btn-secondary">Get In Touch</a>
-                </div>
             </div>
-            <div class="hero-animation">
-                <div class="floating-element element-1"></div>
-                <div class="floating-element element-2"></div>
-                <div class="floating-element element-3"></div>
-            </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- About Section -->
-    <section id="about" class="about">
-        <div class="container">
-            <h2 class="section-title">About Me</h2>
-            <div class="about-content">
-                <div class="about-text">
-                    <p>Welcome to my digital realm! I'm Pranshu Sheoran, better known in the tech community as GlitchWraith. Born on July 21st, I've always been fascinated by the intersection of creativity and technology.</p>
-                    <p>My journey in the tech world spans frontend web development and Android custom ROM development. I specialize in creating engaging user interfaces and optimizing Android experiences through custom firmware development.</p>
-                </div>
-                <div class="about-stats">
-                    <div class="stat-item">
-                        <h3>Frontend</h3>
-                        <p>Web Development</p>
+        <section id="about" class="about fade-in" aria-label="About section">
+            <div class="container">
+                <h2 class="section-title">About Me</h2>
+                <div class="about-content">
+                    <div class="about-text">
+                        <p>Welcome to my digital realm! I'm Pranshu Sheoran, better known in the tech community as GlitchWraith. Born on July 21st, I've always been fascinated by the intersection of creativity and technology.</p>
+                        <p>My journey in the tech world spans frontend web development and Android custom ROM development. I specialize in creating engaging user interfaces and optimizing Android experiences through custom firmware development.</p>
                     </div>
-                    <div class="stat-item">
-                        <h3>ROM</h3>
-                        <p>Development</p>
+                    <div class="about-stats">
+                        <div class="stat-card fade-in">
+                            <h3>Frontend</h3>
+                            <p>Web Development</p>
+                        </div>
+                        <div class="stat-card fade-in">
+                            <h3>ROM</h3>
+                            <p>Development</p>
+                        </div>
+                        <div class="stat-card fade-in">
+                            <h3>Born</h3>
+                            <p>July 21</p>
+                        </div>
                     </div>
-                    <div class="stat-item">
-                        <h3>Born</h3>
-                        <p>July 21</p>
-                    </div>
-                </div>
-            </div>
-        </div>
-    </section>
-
-    <!-- Skills Section -->
-    <section id="skills" class="skills">
-        <div class="container">
-            <h2 class="section-title">Technical Skills</h2>
-            <div class="skills-grid">
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fab fa-html5"></i>
-                    </div>
-                    <h3>Frontend Development</h3>
-                    <p>Creating responsive and interactive web interfaces with modern technologies</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fab fa-android"></i>
-                    </div>
-                    <h3>Custom ROM Development</h3>
-                    <p>Building and optimizing custom Android firmware for enhanced performance</p>
-                </div>
-                <div class="skill-card">
-                    <div class="skill-icon">
-                        <i class="fas fa-code"></i>
-                    </div>
-                    <h3>Web Technologies</h3>
-                    <p>Proficient in HTML, CSS, JavaScript and modern web frameworks</p>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Projects Section -->
-    <section id="projects" class="projects">
-        <div class="container">
-            <h2 class="section-title">My Projects</h2>
-            <div class="projects-grid">
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-tablet-alt"></i> 
-                    </div>
-                    <h3>Xiaomi Pad 6 Hub</h3>
-                    <p>A dedicated portal for Xiaomi Pad 6 resources, guides, and community discussions.</p>
-                    <a href="https://xiaomi-pad-6.vercel.app/" target="_blank" class="btn btn-project">Visit Site</a>
-                </div>
-                <div class="project-card">
-                    <div class="project-icon">
-                        <i class="fas fa-rocket"></i> 
-                    </div>
-                    <h3>HorizonDroid Web</h3>
-                    <p>A custom Android ROM project aiming to provide a clean, optimized, and feature-rich experience.</p>
-                    <a href="https://horizondroid.vercel.app/" target="_blank" class="btn btn-project">Visit Site</a>
+        <section id="skills" class="skills fade-in" aria-label="Skills section">
+            <div class="container">
+                <h2 class="section-title">Technical Skills</h2>
+                <div class="skills-grid">
+                    <article class="skill-card fade-in">
+                        <div class="skill-icon" aria-hidden="true">
+                            <i class="fab fa-html5"></i>
+                        </div>
+                        <h3>Frontend Development</h3>
+                        <p>Creating responsive and interactive web interfaces with modern technologies</p>
+                    </article>
+                    <article class="skill-card fade-in">
+                        <div class="skill-icon" aria-hidden="true">
+                            <i class="fab fa-android"></i>
+                        </div>
+                        <h3>Custom ROM Development</h3>
+                        <p>Building and optimizing custom Android firmware for enhanced performance</p>
+                    </article>
+                    <article class="skill-card fade-in">
+                        <div class="skill-icon" aria-hidden="true">
+                            <i class="fas fa-code"></i>
+                        </div>
+                        <h3>Web Technologies</h3>
+                        <p>Proficient in HTML, CSS, JavaScript and modern web frameworks</p>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Devices Section -->
-    <section id="devices" class="devices">
-        <div class="container">
-            <h2 class="section-title">My Tech Arsenal</h2>
-            <div class="devices-grid">
-                <div class="device-card">
-                    <div class="device-icon">
-                        <i class="fas fa-tablet-alt"></i>
-                    </div>
-                    <h3>Xiaomi Pad 6</h3>
-                    <p class="device-codename">Codename: pipa</p>
-                    <p>Primary development device for custom ROM projects</p>
-                </div>
-                <div class="device-card">
-                    <div class="device-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>Asus Zenfone Max Pro M1</h3>
-                    <p class="device-codename">Codename: xootd</p>
-                    <p>Beast without battery'~'</p>
-                </div>
-                <div class="device-card">
-                    <div class="device-icon">
-                        <i class="fas fa-mobile-alt"></i>
-                    </div>
-                    <h3>IQOO Z3 5G</h3>
-                    <p class="device-codename">Broken Beast</p>
-                    <p>A usable device with broken screen:/</p>
+        <section id="projects" class="projects fade-in" aria-label="Projects section">
+            <div class="container">
+                <h2 class="section-title">My Projects</h2>
+                <div class="projects-grid">
+                    <article class="project-card fade-in">
+                        <div class="project-icon" aria-hidden="true">
+                            <i class="fas fa-tablet-alt"></i>
+                        </div>
+                        <h3>Xiaomi Pad 6 Hub</h3>
+                        <p>A dedicated portal for Xiaomi Pad 6 resources, guides, and community discussions.</p>
+                        <a href="https://xiaomi-pad-6.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Visit Site</a>
+                    </article>
+                    <article class="project-card fade-in">
+                        <div class="project-icon" aria-hidden="true">
+                            <i class="fas fa-rocket"></i>
+                        </div>
+                        <h3>HorizonDroid Web</h3>
+                        <p>A custom Android ROM project aiming to provide a clean, optimized, and feature-rich experience.</p>
+                        <a href="https://horizondroid.vercel.app/" target="_blank" rel="noopener noreferrer" class="btn btn-primary">Visit Site</a>
+                    </article>
                 </div>
             </div>
-        </div>
-    </section>
+        </section>
 
-    <!-- Contact Section -->
-    <section id="contact" class="contact">
-        <div class="container">
-            <h2 class="section-title">Get In Touch</h2>
-            <div class="contact-content">
-                <div class="contact-info">
+        <section id="devices" class="devices fade-in" aria-label="Devices section">
+            <div class="container">
+                <h2 class="section-title">My Tech Arsenal</h2>
+                <div class="devices-grid">
+                    <article class="device-card fade-in">
+                        <div class="device-icon" aria-hidden="true">
+                            <i class="fas fa-tablet-alt"></i>
+                        </div>
+                        <h3>Xiaomi Pad 6</h3>
+                        <p class="device-codename">Codename: pipa</p>
+                        <p>Primary development device for custom ROM projects</p>
+                    </article>
+                    <article class="device-card fade-in">
+                        <div class="device-icon" aria-hidden="true">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>Asus Zenfone Max Pro M1</h3>
+                        <p class="device-codename">Codename: xootd</p>
+                        <p>Beast without battery</p>
+                    </article>
+                    <article class="device-card fade-in">
+                        <div class="device-icon" aria-hidden="true">
+                            <i class="fas fa-mobile-alt"></i>
+                        </div>
+                        <h3>IQOO Z3 5G</h3>
+                        <p class="device-codename">Broken Beast</p>
+                        <p>A usable device with broken screen</p>
+                    </article>
+                </div>
+            </div>
+        </section>
+
+        <section id="contact" class="contact fade-in" aria-label="Contact section">
+            <div class="container">
+                <h2 class="section-title">Get In Touch</h2>
+                <div class="contact-content">
                     <h3>Let's Connect</h3>
                     <p>Feel free to reach out for collaborations or just to say hello!</p>
                     <div class="social-links">
-                        <a href="https://github.com/glitch-wraith" target="_blank" class="social-link">
-                            <i class="fab fa-github"></i>
+                        <a href="https://github.com/glitch-wraith" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="GitHub Profile">
+                            <i class="fab fa-github" aria-hidden="true"></i>
                             <span>GitHub</span>
                         </a>
-                        <a href="https://t.me/glitch_wraith" target="_blank" class="social-link">
-                            <i class="fab fa-telegram"></i>
+                        <a href="https://t.me/glitch_wraith" target="_blank" rel="noopener noreferrer" class="social-link" aria-label="Telegram Profile">
+                            <i class="fab fa-telegram" aria-hidden="true"></i>
                             <span>Telegram</span>
                         </a>
                     </div>
                 </div>
             </div>
+        </section>
+    </main>
+
+    <footer>
+        <div class="container">
+            <p>&copy; 2024 GlitchWraith. All rights reserved.</p>
         </div>
-    </section>
+    </footer>
 
-    <!-- NEW Mobile Navigation Elements -->
-    <button class="mobile-nav-btn-main" id="mobileNavBtnMain">
-        <i class="fas fa-bars"></i>
-    </button>
-    <div class="mobile-nav-container-main" id="mobileNavContainerMain">
-        <a href="#home" class="mobile-nav-link-main"><i class="fas fa-home"></i> <span>Home</span></a>
-        <a href="#about" class="mobile-nav-link-main"><i class="fas fa-user"></i> <span>About</span></a>
-        <a href="#skills" class="mobile-nav-link-main"><i class="fas fa-cogs"></i> <span>Skills</span></a>
-        <a href="#projects" class="mobile-nav-link-main"><i class="fas fa-project-diagram"></i> <span>Projects</span></a>
-        <a href="#devices" class="mobile-nav-link-main"><i class="fas fa-mobile-alt"></i> <span>Devices</span></a>
-        <a href="#contact" class="mobile-nav-link-main"><i class="fas fa-envelope"></i> <span>Contact</span></a>
-    </div>
+    <nav class="mobile-nav" aria-label="Mobile navigation">
+        <button class="mobile-nav-toggle" aria-label="Toggle navigation menu" aria-expanded="false">
+            <i class="fas fa-bars"></i>
+        </button>
+        <div class="mobile-nav-menu" role="menu">
+            <a href="#home" role="menuitem"><i class="fas fa-home" aria-hidden="true"></i>Home</a>
+            <a href="#about" role="menuitem"><i class="fas fa-user" aria-hidden="true"></i>About</a>
+            <a href="#skills" role="menuitem"><i class="fas fa-cogs" aria-hidden="true"></i>Skills</a>
+            <a href="#projects" role="menuitem"><i class="fas fa-project-diagram" aria-hidden="true"></i>Projects</a>
+            <a href="#devices" role="menuitem"><i class="fas fa-mobile-alt" aria-hidden="true"></i>Devices</a>
+            <a href="#contact" role="menuitem"><i class="fas fa-envelope" aria-hidden="true"></i>Contact</a>
+        </div>
+    </nav>
 
-    <script>
-
-        document.addEventListener('DOMContentLoaded', function() {
-            const loader = document.getElementById('loader');
-            let heroAnimationsHaveBeenStarted = false;
-            const minPreloaderTime = 2500; 
-
-            function hideLoaderAndStartContent() {
-                if (loader && !loader.classList.contains('loader-hidden')) {
-                    loader.classList.add('loader-hidden');
-                    document.body.style.overflowY = 'auto'; 
-                    if (!heroAnimationsHaveBeenStarted && typeof startHeroAnimations === 'function') {
-                        startHeroAnimations();
-                        heroAnimationsHaveBeenStarted = true;
-                    }
-                }
-            }
-            
-            const startTime = Date.now();
-
-            window.addEventListener('load', () => {
-                const elapsedTime = Date.now() - startTime;
-                const remainingTime = Math.max(0, minPreloaderTime - elapsedTime);
-                setTimeout(hideLoaderAndStartContent, remainingTime); 
-            });
-
-            setTimeout(hideLoaderAndStartContent, minPreloaderTime + 3000); 
-        });
-
-        function startHeroAnimations() {
-            const heroElementsToAnimate = [
-                document.querySelector('.hero-title-container'), 
-                document.querySelector('.hero-subtitle'),
-                document.querySelector('.hero-description'),
-                document.querySelector('.hero-buttons')
-            ];
-
-            heroElementsToAnimate.forEach((el, index) => {
-                if (el) {
-                    el.style.opacity = '0'; 
-                    el.style.transform = 'translateY(30px)'; 
-                     setTimeout(() => {
-                         el.style.transition = 'opacity 0.8s ease, transform 0.8s ease';
-                         el.style.opacity = '1';
-                         el.style.transform = 'translateY(0)';
-                     }, index * 200);
-                }
-            });
-            const typeElement = document.querySelector('.type-animation');
-            if (typeElement) {
-               typeElement.style.animation = 'none'; 
-               typeElement.offsetHeight; 
-               typeElement.style.animation = ''; 
-            }
-        }
-        
-        const heroAnimationStyle = document.createElement('style');
-        heroAnimationStyle.textContent = `
-            @keyframes fadeInUp {
-                from { opacity: 0; transform: translateY(30px); }
-                to { opacity: 1; transform: translateY(0); }
-            }
-        `;
-        document.head.appendChild(heroAnimationStyle);
-
-        // Smooth scroll and NEW mobile menu closing logic
-        const mobileNavBtnMain = document.getElementById('mobileNavBtnMain'); // Defined for scroll listener
-        const mobileNavContainerMain = document.getElementById('mobileNavContainerMain'); // Defined for scroll listener
-
-        document.querySelectorAll('a[href^="#"]').forEach(anchor => {
-            anchor.addEventListener('click', function (e) {
-                e.preventDefault();
-                const targetId = this.getAttribute('href');
-                const targetElement = document.querySelector(targetId);
-                if (targetElement) {
-                    const navbarHeight = document.querySelector('.navbar').offsetHeight || 70;
-                    const elementPosition = targetElement.getBoundingClientRect().top;
-                    const offsetPosition = elementPosition + window.pageYOffset - navbarHeight;
-
-                    window.scrollTo({
-                        top: offsetPosition,
-                        behavior: 'smooth'
-                    });
-                }
-                
-                // Close NEW mobileNavContainerMain if active
-                if (mobileNavContainerMain && mobileNavContainerMain.classList.contains('open')) {
-                    mobileNavContainerMain.classList.remove('open');
-                    const icon = mobileNavBtnMain.querySelector('i');
-                    if (icon) { 
-                       icon.classList.remove('fa-times');
-                       icon.classList.add('fa-bars');
-                    }
-                }
-            });
-        });
-
-        // OLD Hamburger logic (commented out)
-        /*
-        const hamburger = document.querySelector('.hamburger');
-        const navMenu = document.querySelector('.nav-menu');
-        if (hamburger && navMenu) { 
-            hamburger.addEventListener('click', () => {
-                hamburger.classList.toggle('active');
-                navMenu.classList.toggle('active');
-            });
-            hamburger.addEventListener('keydown', (e) => {
-                if (e.key === 'Enter' || e.key === ' ') {
-                    e.preventDefault(); 
-                    hamburger.click();
-                }
-            });
-        }
-        */
-
-        // NEW Mobile Nav Logic
-        // const mobileNavBtnMain = document.getElementById('mobileNavBtnMain'); // Already defined above
-        // const mobileNavContainerMain = document.getElementById('mobileNavContainerMain'); // Already defined above
-        const mobileNavLinksMain = document.querySelectorAll('.mobile-nav-link-main');
-
-        if (mobileNavBtnMain && mobileNavContainerMain) {
-            mobileNavBtnMain.addEventListener('click', (event) => {
-                event.stopPropagation(); 
-                mobileNavContainerMain.classList.toggle('open');
-                const icon = mobileNavBtnMain.querySelector('i');
-                if (mobileNavContainerMain.classList.contains('open')) {
-                    icon.classList.remove('fa-bars');
-                    icon.classList.add('fa-times');
-                } else {
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            });
-
-            // Close menu when a link is clicked (handled by the global a[href^="#"] listener now)
-            // mobileNavLinksMain.forEach(link => { ... }); // This part is covered by the enhanced scroll listener
-
-            document.addEventListener('click', (event) => {
-                if (mobileNavContainerMain.classList.contains('open') &&
-                    !mobileNavContainerMain.contains(event.target) &&
-                    !mobileNavBtnMain.contains(event.target)) {
-                    mobileNavContainerMain.classList.remove('open');
-                    const icon = mobileNavBtnMain.querySelector('i');
-                    icon.classList.remove('fa-times');
-                    icon.classList.add('fa-bars');
-                }
-            });
-        }
-
-
-        window.addEventListener('scroll', () => {
-            const navbar = document.querySelector('.navbar');
-            if (navbar) { 
-                if (window.scrollY > 50) { 
-                    navbar.style.background = 'rgba(20, 20, 35, 0.98)'; 
-                    navbar.style.boxShadow = '0 2px 10px rgba(0,0,0,0.2)';
-                } else {
-                    navbar.style.background = 'rgba(26, 26, 46, 0.95)';
-                    navbar.style.boxShadow = 'none';
-                }
-            }
-        });
-
-        const observerOptions = { threshold: 0.1, rootMargin: '0px 0px -50px 0px' };
-        const sectionObserver = new IntersectionObserver((entries, observerInstance) => {
-            entries.forEach(entry => {
-                if (entry.isIntersecting) {
-                    entry.target.style.animation = 'fadeInUp 1s ease forwards'; 
-                    observerInstance.unobserve(entry.target); 
-                }
-            });
-        }, observerOptions);
-        
-        document.querySelectorAll('.skill-card, .project-card, .device-card, .stat-item, .about-text, .about-stats, .contact-info').forEach(el => {
-            el.style.opacity = '0'; 
-            el.style.transform = 'translateY(30px)'; 
-            sectionObserver.observe(el); 
-        });
-
-        document.querySelectorAll('.glitch-name, .glitch-username').forEach(element => {
-            const originalDuration = element.style.animationDuration || (element === document.querySelector('.glitch-name') ? '3s' : '2s');
-            element.addEventListener('mouseenter', () => {
-                element.style.animationDuration = '0.2s'; 
-                element.style.animationIterationCount = 'infinite'; 
-            });
-            element.addEventListener('mouseleave', () => {
-                element.style.animationDuration = originalDuration; 
-            });
-        });
-
-        let particleInterval;
-        function startParticles() {
-             if (window.innerWidth > 768) { 
-                particleInterval = setInterval(createParticle, 600); 
-            }
-        }
-        function stopParticles() {
-            clearInterval(particleInterval);
-        }
-        function createParticle() {
-            const particle = document.createElement('div');
-            particle.style.position = 'fixed';
-            particle.style.width = Math.random() * 2 + 0.5 + 'px'; 
-            particle.style.height = particle.style.width;
-            particle.style.background = Math.random() > 0.5 ? '#00ff41' : '#00ffff'; 
-            particle.style.borderRadius = '50%';
-            particle.style.left = Math.random() * window.innerWidth + 'px';
-            particle.style.top = '-10px';
-            particle.style.pointerEvents = 'none';
-            particle.style.zIndex = '-1'; 
-            particle.style.opacity = Math.random() * 0.4 + 0.2; 
-            
-            document.body.appendChild(particle);
-
-            const animation = particle.animate([
-                { transform: `translateY(0px) translateX(${Math.random()*20-10}px)`, opacity: parseFloat(particle.style.opacity) },
-                { transform: `translateY(${window.innerHeight + 20}px) translateX(${Math.random()*100-50}px)`, opacity: 0 }
-            ], {
-                duration: Math.random() * 5000 + 4000, 
-                easing: 'linear'
-            });
-            animation.onfinish = () => { particle.remove(); };
-        }
-        
-        window.addEventListener('load', () => {
-           setTimeout(startParticles, 2500); 
-        });
-
-        console.log('💀 GlitchWraith\'s Portfolio v2.1 Activated 💀');
-        console.log('Remember to replace placeholder SVGs with your cool skeleton!');
-        
-// Chnage folder and framecount here 
-  const folder = "cursor4";  
-  const frameCount = 3; 
-  
-  const frames = [];
-
-  for (let i = 1; i <= frameCount; i++) {
-    frames.push(`${folder}/frame${i}.png`);
-  }
-
-  let index = 0;
-  const fps = 10;
-
-  setInterval(() => {
-    document.body.style.cursor =
-     `url(${frames[index]}), auto`;
-    index = (index + 1) % frames.length;
-  }, 2000 / fps);
-        
-        
-    </script>
+    <script src="index.js" defer></script>
 </body>
 </html>
